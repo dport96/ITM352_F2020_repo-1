@@ -3,7 +3,7 @@
 var express = require('express'); //express module
 var app = express(); //set module variable
 var myParser = require("body-parser"); //body parser module
-var products = require('./public/products.js'); //loads products.js file and sets variable
+var products = require('./public/products.js').products; //loads products.js file and sets variable
 var querystring = require('qs'); 
 
 //records request in the console or all request methods
@@ -18,10 +18,11 @@ app.use(myParser.urlencoded({ extended: true }));
 app.post("/process_form", function (request, response) {
     let POST = request.body;
     
+    var hasvalidquantities = true; 
+    var hasquantities = false;
     if (typeof POST['purchase_submit'] != 'undefined') {
         for (var i = 0; i < products.length; i++) {
-            var hasvalidquantities = true; 
-            var hasquantities = false;
+
             var qty = POST[`quantity${i}`];
             hasquantities=hasquantities || qty>0; //if either is true
             hasvalidquantities=hasvalidquantities && isNonNegInt(qty); //both must be true 
